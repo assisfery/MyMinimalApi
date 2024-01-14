@@ -17,5 +17,9 @@ app.MapPost("/todo", async (Todo todo, TodoDb db) => {
     return Results.Created("todo/" + todo.Id, todo);
 });
 
+app.MapGet("todo/{id}", async (int id, TodoDb db) =>
+{
+    return await db.Todos.FindAsync(id) is Todo todo ? Results.Ok(todo) : Results.NotFound();
+});
 
 app.Run();
