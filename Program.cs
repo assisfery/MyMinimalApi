@@ -22,4 +22,17 @@ app.MapGet("todo/{id}", async (int id, TodoDb db) =>
     return await db.Todos.FindAsync(id) is Todo todo ? Results.Ok(todo) : Results.NotFound();
 });
 
+app.MapDelete("todo/{id}", async (int id, TodoDb db) =>
+{
+    Todo? todo = await db.Todos.FindAsync(id);
+
+    if (todo == null)
+        return Results.NotFound();
+
+    db.Todos.Remove(todo);
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
+
 app.Run();
